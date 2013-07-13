@@ -15,9 +15,8 @@ script : |
   sudo apt-get install riak
   sudo rm /etc/rc*/*riak
   sudo cp app.config /etc/riak
+  sudo rm -rf /var/lib/riak/*
 init-script: |
-  sudo mkdir /tmp/ramdisk
-  sudo mount -t tmpfs -o size=128M tmpfs /tmp/ramdisk/
-  sudo mkdir /tmp/ramdisk/riak
-  sudo chown riak:riak /tmp/ramdisk/riak -R
+  sudo mount -t tmpfs -o size=128M tmpfs /var/lib/riak/
+  sudo chown riak:riak /var/lib/riak/ -R
   sudo service riak start

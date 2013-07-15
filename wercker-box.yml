@@ -15,5 +15,7 @@ script : |
   sudo apt-get install riak
   sudo cp app.config /etc/riak
   sudo rm -rf /var/lib/riak/*
+  sudo service riak start
+  sudo /usr/sbin/riak-admin wait-for-service riak_kv riak@127.0.0.1
 init-script: |
   sudo /usr/sbin/riak-admin wait-for-service riak_kv riak@127.0.0.1

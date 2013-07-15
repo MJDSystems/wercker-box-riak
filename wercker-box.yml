@@ -13,11 +13,7 @@ script : |
   sudo bash -c "echo deb http://apt.basho.com $(lsb_release -sc) main > /etc/apt/sources.list.d/basho.list"
   sudo apt-get update
   sudo apt-get install riak
-  sudo rm /etc/rc*/*riak
   sudo cp app.config /etc/riak
   sudo rm -rf /var/lib/riak/*
 init-script: |
-  sudo mount -t tmpfs -o size=128M tmpfs /var/lib/riak/
-  sudo chown riak:riak /var/lib/riak/ -R
-  sudo service riak start
   sudo /usr/sbin/riak-admin wait-for-service riak_kv riak@127.0.0.1

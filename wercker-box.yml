@@ -20,3 +20,4 @@ init-script: |
   sudo mount -t tmpfs -o size=128M tmpfs /var/lib/riak/
   sudo chown riak:riak /var/lib/riak/ -R
   sudo service riak start
+  sudo /usr/sbin/riak-admin wait-for-service riak_kv riak@127.0.0.1

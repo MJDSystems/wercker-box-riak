@@ -1,21 +1,33 @@
 name: riak
-version: 0.0.1
-inherits: wercker/ubuntu12.04-webessentials@0.0.3
+version: 0.0.7
+inherits: wercker/ubuntu12.04-webessentials@0.0.12
 type : service
 platform : ubuntu@12.04
 description : riak
 keywords:
   - riak
 packages :
-  - riak
+  - riak@1.4
 script : |
   curl http://apt.basho.com/gpg/basho.apt.key | sudo apt-key add -
   sudo bash -c "echo deb http://apt.basho.com $(lsb_release -sc) main > /etc/apt/sources.list.d/basho.list"
   sudo apt-get update
   sudo apt-get install riak
+  sudo service riak stop
   sudo cp app.config /etc/riak
   sudo rm -rf /var/lib/riak/*
+  sudo mount -t tmpfs -o size=128M tmpfs /var/lib/riak/
+  sudo chown riak:riak /var/lib/riak/ -R
   sudo service riak start
   sudo /usr/sbin/riak-admin wait-for-service riak_kv riak@127.0.0.1
+  sudo netstat -tpln
 init-script: |
+  sudo service riak stop
+  sudo mount -t tmpfs -o size=128M tmpfs /var/lib/riak/
+  sudo chown riak:riak /var/lib/riak/ -R
+  sudo service riak start
   sudo /usr/sbin/riak-admin wait-for-service riak_kv riak@127.0.0.1
+env:
+  MJDSYS_RIAK_HOST: $$HOST$$
+  MJDSYS_RIAK_PBCONNECT: $$HOST$$:8087
+  MJDSYS_RIAK_HTTPCONNECT: $$HOST$$:8098
